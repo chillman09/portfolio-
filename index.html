@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ohilovish</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<!-- grain / noise overlay -->
+<canvas id="grain"></canvas>
+
+<!-- custom cursor -->
+<div class="cursor-dot" id="cursorDot"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- entry gate -->
+<div class="gate" id="gate">
+  <div class="gate-inner">
+    <div class="gate-eyebrow">SIGNAL LOST</div>
+    <button class="gate-prompt" id="gateBtn">
+      <span class="gate-bracket">[</span>
+      <span class="gate-text">CLICK TO ENTER</span>
+      <span class="gate-bracket">]</span>
+    </button>
+    <div class="gate-sub">audio &amp; motion will play</div>
+  </div>
+  <div class="gate-scan"></div>
+</div>
+
+<!-- background media -->
+<video id="bgVideo" class="bg-video" src="assets/background.mp4" autoplay muted loop playsinline></video>
+<div class="bg-vignette"></div>
+<audio id="bgAudio" src="assets/theme.mp3" loop preload="auto"></audio>
+
+<!-- audio control -->
+<button class="audio-toggle" id="audioToggle" aria-label="Toggle audio">
+  <div class="audio-bars"><span></span><span></span><span></span><span></span></div>
+  <span class="audio-label">THEME.MP3</span>
+</button>
+
+<!-- view counter -->
+<div class="view-counter">
+  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M1 12s4-7 11-7 11 7 11 7-4 7-11 7-11-7-11-7z"/><circle cx="12" cy="12" r="3"/></svg>
+  <span id="viewCount">1</span>
+</div>
+
+<main class="stage">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="profile-card">
+      <div class="avatar-wrap">
+        <video class="avatar-media" id="avatarVideo" src="assets/avatar.mp4" autoplay muted loop playsinline poster="assets/avatar-fallback.jpg"></video>
+        <div class="avatar-ring"></div>
+      </div>
+
+      <h1 class="handle">
+        <span id="handleText">OHILOVISH</span>
+        <svg class="handle-crown" width="22" height="18" viewBox="0 0 24 20" fill="currentColor"><path d="M2 18h20l1.5-11-6 4-5.5-8-5.5 8-6-4L2 18z"/></svg>
+      </h1>
+
+      <p class="tagline" id="taglineText">write your tagline here</p>
+
+      <div class="status-card">
+        <div class="status-row">
+          <span class="status-dot"></span>
+          <span class="status-text">STATUS UNAVAILABLE</span>
+        </div>
+        <div class="status-sub">Join <a href="#" id="discordInviteLink" target="_blank" rel="noopener">discord.gg/yourinvite</a> to view presence</div>
+      </div>
+
+      <div class="social-row">
+        <a class="social-link" href="#" target="_blank" rel="noopener" aria-label="YouTube">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.5v-7l6.3 3.5z"/></svg>
+        </a>
+        <a class="social-link" href="#" target="_blank" rel="noopener" aria-label="Instagram">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.06 1.1.05 1.8.2 2.5.48a5 5 0 0 1 1.8 1.17 5 5 0 0 1 1.17 1.8c.28.7.43 1.4.48 2.5.05 1 .06 1.4.06 4.1s0 3.1-.06 4.1c-.05 1.1-.2 1.8-.48 2.5a5 5 0 0 1-1.17 1.8 5 5 0 0 1-1.8 1.17c-.7.28-1.4.43-2.5.48-1 .05-1.4.06-4.1.06s-3.1 0-4.1-.06c-1.1-.05-1.8-.2-2.5-.48a5 5 0 0 1-1.8-1.17 5 5 0 0 1-1.17-1.8c-.28-.7-.43-1.4-.48-2.5C2 15.1 2 14.7 2 12s0-3.1.06-4.1c.05-1.1.2-1.8.48-2.5A5 5 0 0 1 3.71 3.6 5 5 0 0 1 5.5 2.44c.7-.28 1.4-.43 2.5-.48C8.9 2 9.3 2 12 2zm0 1.8c-2.65 0-2.97 0-4.02.06-.9.04-1.4.19-1.72.32-.44.17-.75.37-1.08.7-.33.33-.53.64-.7 1.08-.13.32-.28.82-.32 1.72C4.1 8.53 4.1 8.85 4.1 11.8v.4c0 2.65 0 2.97.06 4.02.04.9.19 1.4.32 1.72.17.44.37.75.7 1.08.33.33.64.53 1.08.7.32.13.82.28 1.72.32 1.05.05 1.37.06 4.02.06s2.97 0 4.02-.06c.9-.04 1.4-.19 1.72-.32.44-.17.75-.37 1.08-.7.33-.33.53-.64.7-1.08.13-.32.28-.82.32-1.72.05-1.05.06-1.37.06-4.02s0-2.97-.06-4.02c-.04-.9-.19-1.4-.32-1.72a2.9 2.9 0 0 0-.7-1.08 2.9 2.9 0 0 0-1.08-.7c-.32-.13-.82-.28-1.72-.32C14.97 3.8 14.65 3.8 12 3.8zm0 3.05a5.15 5.15 0 1 1 0 10.3 5.15 5.15 0 0 1 0-10.3zm0 1.8a3.35 3.35 0 1 0 0 6.7 3.35 3.35 0 0 0 0-6.7zm5.35-2a1.2 1.2 0 1 1 0 2.4 1.2 1.2 0 0 1 0-2.4z"/></svg>
+        </a>
+        <a class="social-link" href="#" target="_blank" rel="noopener" aria-label="Discord">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.3 4.4A19.8 19.8 0 0 0 15.4 3l-.25.5c1.7.4 2.7.9 3.7 1.6a13.9 13.9 0 0 0-11.7 0c1-.7 2.1-1.2 3.7-1.6L10.6 3a19.7 19.7 0 0 0-4.9 1.4C2.9 8.3 2.1 12 2.4 15.7a20 20 0 0 0 6.1 3.1l1-1.3a12.6 12.6 0 0 1-2-1c.17-.12.33-.25.5-.38a14.2 14.2 0 0 0 12 0c.17.13.33.26.5.38-.63.4-1.3.73-2 1l1 1.3a19.9 19.9 0 0 0 6.1-3.1c.4-4.3-.7-7.9-3.4-11.3zM9.7 13.5c-.8 0-1.4-.7-1.4-1.6s.63-1.6 1.4-1.6c.8 0 1.42.72 1.4 1.6 0 .9-.6 1.6-1.4 1.6zm5.6 0c-.8 0-1.4-.7-1.4-1.6s.63-1.6 1.4-1.6c.8 0 1.42.72 1.4 1.6 0 .9-.6 1.6-1.4 1.6z"/></svg>
+        </a>
+      </div>
+    </div>
+
+    <div class="scroll-cue">
+      <span>SKILLS</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section class="skills" id="skills">
+    <div class="skills-head">
+      <span class="skills-eyebrow">// CAPABILITIES</span>
+      <h2 class="skills-title">what i work with</h2>
+    </div>
+
+    <div class="skills-grid" id="skillsGrid">
+      <!-- injected by js/config.js -->
+    </div>
+  </section>
+
+  <footer class="foot">
+    <span>© <span id="year"></span> ohilovish</span>
+    <span class="foot-dot">·</span>
+    <span>built for the fog</span>
+  </footer>
+
+</main>
+
+<script src="js/config.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
